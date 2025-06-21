@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demo Publisher Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main {
+      padding: 40px;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    .ad-spot {
+      margin: 30px 0;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      text-align: center;
+      height: 250px;
+      position: relative;
+    }
+    .ad-spot img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .ad-title {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+    .ad-spot a {
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to Our Demo Website</h1>
+  </header>
+
+  <main>
+    <div class="content">
+      <p>This is a sample website for testing ad distribution. Below is an ad spot where ads will appear based on category and matching logic from the AdGenius platform.</p>
+
+      <div class="ad-spot" id="ad-container">
+        Loading Ad...
+      </div>
+
+      <p>Scroll down to read more content and see how ads can be seamlessly integrated into real websites.</p>
+    </div>
+  </main>
+
+  <script>
+    // Replace this with your actual websiteId
+    const websiteId = "PUT_YOUR_WEBSITE_ID_HERE"; // from MongoDB
+
+    fetch(`https://<your-backend-domain>/api/ad/${websiteId}`)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("ad-container");
+        container.innerHTML = `
+          <a href="${data.link}" target="_blank">
+            <img src="${data.image}" alt="${data.title}" />
+            <div class="ad-title">${data.title}</div>
+          </a>
+        `;
+      })
+      .catch(err => {
+        console.error("Ad fetch failed", err);
+        document.getElementById("ad-container").textContent = "No ad available";
+      });
+  </script>
+</body>
+</html>
